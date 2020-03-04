@@ -3,9 +3,7 @@ package com.edu.lnu.mongoDbPpoject.service;
 import com.edu.lnu.mongoDbPpoject.model.Post;
 import com.edu.lnu.mongoDbPpoject.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -16,11 +14,21 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private PostRepository repository;
 
+    @Autowired
+    private UserServiceImpl userService;
+
     @Override
-    public Post createPost(Post post, String postId) {
-        post.setId(postId);
+    public Post createPost(Post post) {
         post.setDate(new Timestamp(new Date().getTime()));
+        post.setAuthorNickName(userService.getCurrentUserName());
         return repository.save(post);
+    }
+
+    @Override
+    public Post getPostIfUserHasAccess(String postId) {
+        String userName= userService.getCurrentUserName();
+        Post post = repository.findPostByIdAndAuthorNickName(postId, userName);
+        return post;
     }
 
     @Override
@@ -35,16 +43,14 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post updatePost(String text, String postId) {
-       // CommentDto oldCommentDto = getCommentIfUserHasAccessToThisComment(commentId);
-        Post oldPost = repository.getById(postId);
+        Post oldPost = getPostIfUserHasAccess(postId);
         oldPost.setText(text);
         return repository.save(oldPost);
     }
 
     @Override
     public Post deletePost(String postId) {
-        //getCommentIfUserHasAccessToThisComment(commentId);
-        Post oldPost = repository.getById(postId);
+        Post oldPost = getPostIfUserHasAccess(postId);
         repository.deleteById(postId);
         return oldPost;
     }
