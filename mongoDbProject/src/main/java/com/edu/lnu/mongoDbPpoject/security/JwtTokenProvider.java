@@ -1,6 +1,7 @@
 package com.edu.lnu.mongoDbPpoject.security;
 
 import com.edu.lnu.mongoDbPpoject.model.Role;
+import com.edu.lnu.mongoDbPpoject.model.User;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -77,4 +78,24 @@ public class JwtTokenProvider {
             throw new JwtException("Expired or invalid JWT token");
         }
     }
+    /*public String generateAccessToken(User user) {
+        Claims claims = Jwts.claims().setSubject(user.getNickName());
+        claims.put("roles", user.getRoles());
+        claims.put("id", user.get_id());
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(new Date().getTime() + validityInMilliseconds))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+    }
+
+    public String generateRefreshToken() {
+        return Jwts.builder()
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(new Date().getTime() + validityInMilliseconds))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+    }*/
 }

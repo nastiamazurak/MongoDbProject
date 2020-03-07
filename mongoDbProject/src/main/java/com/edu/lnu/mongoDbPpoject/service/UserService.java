@@ -8,4 +8,5 @@ public interface UserService {
     String getCurrentUserName();
     User updateUserInfo(User user);
     User findUser(String feature);
+    User getUserByNickName(String nickname);
 }
