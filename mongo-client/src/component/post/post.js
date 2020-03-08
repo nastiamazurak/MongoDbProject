@@ -1,6 +1,6 @@
 import React from "react";
-import axios from "axios";
 import {Card} from "react-bootstrap";
+import {Comment} from "./commentBox";
 
 export class Post extends React.Component{
     state={
@@ -21,7 +21,8 @@ export class Post extends React.Component{
                     <Card.Body>
                         <Card.Title></Card.Title>
                         <Card.Text>
-                            {this.props.text}
+                                {this.props.text}
+
                         </Card.Text>
                     </Card.Body>
                 </Card>

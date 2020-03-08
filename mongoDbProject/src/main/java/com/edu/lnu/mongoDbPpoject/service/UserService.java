@@ -6,7 +6,7 @@ public interface UserService {
 
     User getUserInfo(String id);
     String getCurrentUserName();
-    User updateUserInfo(User user);
+    User updateUserInfo(User user, String username);
     User findUser(String feature);
     User getUserByNickName(String nickname);
 }

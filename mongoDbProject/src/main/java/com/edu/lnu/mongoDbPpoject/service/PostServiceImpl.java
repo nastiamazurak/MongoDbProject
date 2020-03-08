@@ -19,9 +19,14 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post createPost(Post post) {
-        post.setDate(new Timestamp(new Date().getTime()));
-        post.setAuthorNickName(userService.getCurrentUserName());
-        return repository.save(post);
+        if (!post.getText().equals("")) {
+            post.setDate(new Timestamp(new Date().getTime()));
+           // post.setAuthorNickName(userService.getCurrentUserName());
+            return repository.save(post);
+        }
+        else{
+            return null;
+        }
     }
 
     @Override

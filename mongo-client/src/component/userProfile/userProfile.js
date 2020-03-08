@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import axios from "axios";
 import userAvatar from "/Users/nastiamazurak/Desktop/SimpleFacebook/mongo-client/src/component/image/avatar.png"
 import {Container, FormControl, InputGroup} from "react-bootstrap";
@@ -7,12 +7,16 @@ import {Col} from "react-bootstrap";
 import {ListGroup} from "react-bootstrap";
 import {Button} from "react-bootstrap";
 import {Post} from "../post/post";
+import WritePost from "../post/writePost"
+import Modal from "react-bootstrap/Modal";
+import UpdateInfoModal from "./updateInfoModal";
 
 export class UserProfile extends React.Component{
     state={
         user: {},
         posts:[]
     };
+
     cookiesToJson = () => Object.fromEntries(document.cookie.split(/; */).map((c) => {
         const [key, ...v] = c.split('=');
         return [key, decodeURIComponent(v.join('='))];
@@ -46,7 +50,7 @@ export class UserProfile extends React.Component{
         this.getUserPosts();
     }
 
-    render(){
+    render() {
         return(
             <Container>
                 <Row>
@@ -65,7 +69,8 @@ export class UserProfile extends React.Component{
                             <ListGroup.Item>Country: {this.state.user.country}</ListGroup.Item>
                             <ListGroup.Item>City: {this.state.user.city}</ListGroup.Item>
                             <ListGroup.Item>
-                                <Button onCLick="">Update data</Button>
+                                {/*<Button onCLick="">Update data</Button>*/}
+                                <UpdateInfoModal/>
                             </ListGroup.Item>
                         </ListGroup>
                     </Col>
@@ -86,14 +91,7 @@ export class UserProfile extends React.Component{
                 </Row>
                 <br/>
                 <div className="align-content-center" style={{height: "30%",  margin: "20px"}}>
-                    <InputGroup>
-                        <FormControl
-                            placeholder="Write a post.."
-                            aria-label=""/>
-                        <InputGroup.Append>
-                            <Button variant="outline-secondary" style={{background: "#40babf"}}>Post</Button>
-                        </InputGroup.Append>
-                    </InputGroup>
+                    <WritePost></WritePost>
                 <br/>
                 {this.state.posts.map(element => (
                     <Post
@@ -102,19 +100,6 @@ export class UserProfile extends React.Component{
                         text = {element.text}>
                     </Post>))}
                 </div>
-
-                {/*<div className="d-flex-row">
-                <div className="p-2 d-flex justify-content-lg-start">
-                    <img style={{height: "20%", width:"20%", marginTop:"2%"}}
-                    src={userAvatar} alt='avatar'/>
-                </div>
-                <br/>
-                    <h1>{this.state.user.name} {this.state.user.surname}</h1>
-                <h3 style={{color:"#4db6ac"}}>@{this.state.user.nickName}</h3>
-                </div>
-                    <div className=" d-flex justify-content-lg-end align-content-lg-start">
-                        <h1>User info</h1>
-                    </div>*/}
             </Container>
 
         )

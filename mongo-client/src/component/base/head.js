@@ -37,7 +37,7 @@ export class Head extends React.Component{
         console.log(this.isAuthorized());
         return (
             <Navbar  style={{background: "#2d8286"}}>
-                <Navbar.Brand href="" style={{color: "#b3e5dd"}} >Simple Facebook</Navbar.Brand>
+                <Navbar.Brand href="/home" style={{color: "#b3e5dd"}} >Simple Facebook</Navbar.Brand>
                 <Navbar.Toggle />
                 <Navbar.Collapse className="justify-content-end">
                     <Nav className="ml-auto" style={{color: "#b3e5dd"}}>

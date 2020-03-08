@@ -69,13 +69,13 @@ export class Registration extends React.Component {
                     status: response.status,
                 });
             })
-    }
+    };
 
     setRedirect = () => {
         this.setState({
             redirect: true
         })
-    }
+    };
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect to='/login' />

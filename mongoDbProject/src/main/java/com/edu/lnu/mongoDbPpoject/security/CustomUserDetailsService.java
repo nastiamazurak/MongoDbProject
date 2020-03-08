@@ -17,6 +17,7 @@ import java.util.*;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
+    private User user;
     @Autowired
     private UserRepository userRepository;
 
@@ -62,5 +63,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private UserDetails buildUserForAuthentication(User user, List<GrantedAuthority> authorities) {
         return new org.springframework.security.core.userdetails.User(user.getNickName(), user.getPassword(), authorities);
+    }
+    public User getUser(){
+        return this.user;
     }
 }

@@ -5,6 +5,9 @@ import {Button} from "react-bootstrap";
 import {Card} from "react-bootstrap";
 import {Post} from "../post/post";
 import axios from "axios";
+import WritePost from "../post/writePost";
+import {CommentBox} from "../post/commentBox";
+import {WriteComment} from "../post/writeComment";
 
 export class Home extends React.Component {
     state={
@@ -18,7 +21,6 @@ export class Home extends React.Component {
             )
         })
     };
-
     componentDidMount() {
         this.getPosts();
 
@@ -27,21 +29,23 @@ export class Home extends React.Component {
         return (
             <Container style={{width: "60%"}}>
             <div className='align-content-center'  style={{height: "100px",  margin: "20px"}}>
-                <InputGroup className="md-lg-3">
-                    <FormControl
-                        placeholder="Write a post.."
-                        aria-label=""/>
-                    <InputGroup.Append>
-                        <Button variant="outline-secondary" style={{background: "#40babf"}}>Post</Button>
-                    </InputGroup.Append>
-                </InputGroup>
+                <WritePost></WritePost>
                 <br/>
                 {this.state.posts.map(element => (
+                    <div>
                 <Post
                     author = {element.authorNickName}
                     date = {element.date}
                     text = {element.text}>
-                </Post>))}
+                </Post>{' '}
+                        {element.comments!=null &&
+                            <div>
+                        <CommentBox comments={element.comments}/>
+                                </div>}
+                        <br/>
+                        <br/>
+                    </div>
+                ))}
             </div>
             </Container>
         )

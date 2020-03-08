@@ -3,10 +3,16 @@ package com.edu.lnu.mongoDbPpoject.service;
 import com.edu.lnu.mongoDbPpoject.model.User;
 import com.edu.lnu.mongoDbPpoject.repository.RoleRepository;
 import com.edu.lnu.mongoDbPpoject.repository.UserRepository;
+import com.edu.lnu.mongoDbPpoject.security.CookieProvider;
+import com.edu.lnu.mongoDbPpoject.security.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -35,8 +41,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUserInfo(User user) {
-        return null;
+    public User updateUserInfo(User user, String username) {
+        User newUserInfo = userRepository.findByNickName(username);
+        newUserInfo.setName(user.getName());
+        newUserInfo.setSurname(user.getSurname());
+        newUserInfo.setBirthDate((user.getBirthDate()));
+        newUserInfo.setCity(user.getCity());
+        newUserInfo.setCountry(user.getCountry());
+        return userRepository.save(newUserInfo);
     }
 
     @Override
