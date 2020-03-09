@@ -36,7 +36,8 @@ export class Home extends React.Component {
                 <Post
                     author = {element.authorNickName}
                     date = {element.date}
-                    text = {element.text}>
+                    text = {element.text}
+                    id = {element.id}>
                 </Post>{' '}
                         {element.comments!=null &&
                             <div>

@@ -11,6 +11,7 @@ import WritePost from "../post/writePost"
 import Modal from "react-bootstrap/Modal";
 import UpdateInfoModal from "./updateInfoModal";
 
+
 export class UserProfile extends React.Component{
     state={
         user: {},
@@ -50,6 +51,12 @@ export class UserProfile extends React.Component{
         this.getUserPosts();
     }
 
+    formatDate(){
+       var options = { month: 'long', year: 'numeric', day: 'numeric'};
+       return new Date(this.state.user.birthDate).toLocaleDateString('en-GB', [],options)
+       // return this.state.user.birthDate.format(new Date(), 'MMMM Do, YYYY H:mma')
+    }
+
     render() {
         return(
             <Container>
@@ -65,7 +72,7 @@ export class UserProfile extends React.Component{
                         <br/>*/}
                         <br/>
                         <ListGroup variant="flush">
-                            <ListGroup.Item>Birth Date: {this.state.user.birthDate}</ListGroup.Item>
+                            <ListGroup.Item>Birth Date: {this.formatDate()}</ListGroup.Item>
                             <ListGroup.Item>Country: {this.state.user.country}</ListGroup.Item>
                             <ListGroup.Item>City: {this.state.user.city}</ListGroup.Item>
                             <ListGroup.Item>

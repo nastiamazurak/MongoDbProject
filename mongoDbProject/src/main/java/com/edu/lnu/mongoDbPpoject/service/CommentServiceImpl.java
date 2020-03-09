@@ -5,7 +5,6 @@ import com.edu.lnu.mongoDbPpoject.model.Post;
 import com.edu.lnu.mongoDbPpoject.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,17 +20,22 @@ public class CommentServiceImpl  implements CommentService {
 
     @Override
     public Post addComment(String postId, String text, String username) {
-        Post post = postRepository.getById(postId);
-        List<Comment> comments = new ArrayList<>();
-        Comment comment = new Comment();
-        comment.setAuthor_nickname(username);
-        comment.setDate(new Timestamp(new Date().getTime()));
-        comment.setText(text);
-        comments.add(comment);
-        post.setComments(comments);
-        postRepository.save(post);
-        return post;
+            Post post = postRepository.getById(postId);
 
+            if (post.getComments() == null) {
+                List<Comment> comments = new ArrayList<>();
+                post.setComments(comments);
+            }
+
+            List<Comment> comments = post.getComments();
+            Comment comment = new Comment();
+            comment.setAuthor_nickname(username);
+            comment.setDate(new Timestamp(new Date().getTime()));
+            comment.setText(text);
+            comments.add(comment);
+            post.setComments(comments);
+            postRepository.save(post);
+            return post;
     }
 
     @Override

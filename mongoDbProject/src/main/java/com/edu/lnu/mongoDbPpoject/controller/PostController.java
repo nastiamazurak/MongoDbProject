@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -45,10 +44,10 @@ public class PostController {
     public ResponseEntity<Post> editPost(@RequestBody String text, @PathVariable String id){
         return ResponseEntity.status(HttpStatus.OK).body(service.updatePost(text, id));
     }
-    @PutMapping("/comment")
-    public ResponseEntity<Post> createComment( @RequestBody String postId,String text, HttpServletRequest request){
+    @PostMapping("/comment")
+    public ResponseEntity<Post> createComment(@RequestBody String comment[], HttpServletRequest request){
         String username = cookie.readCookie(request, "username");
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.addComment(postId, text, username));
-
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.addComment(comment[0],comment[1], username));
     }
+
 }

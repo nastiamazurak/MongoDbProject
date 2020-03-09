@@ -38,12 +38,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> showAll() {
-        return repository.findAll();
+        return repository.findAllByOrderByDateDesc();
     }
 
     @Override
     public List<Post> getAllByUserNickname(String nickname) {
-       return repository.getAllByAuthorNickName(nickname);
+       return repository.getAllByAuthorNickNameOrderByDateDesc(nickname);
     }
 
     @Override

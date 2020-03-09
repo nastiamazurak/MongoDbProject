@@ -26,7 +26,6 @@ export class CommentBox extends React.Component{
                         date={element.date}/>
                     </ListGroup.Item>))}
                 </ListGroup>
-                    {/*<WriteComment id={this.props.postId}/>*/}
                 </Accordion.Collapse>
             </Card>
             </Accordion>
