@@ -1,23 +1,21 @@
-import React, {useState} from "react";
+import React from "react";
 import axios from "axios";
 import userAvatar from "/Users/nastiamazurak/Desktop/SimpleFacebook/mongo-client/src/component/image/avatar.png"
-import {Container, FormControl, InputGroup} from "react-bootstrap";
+import {Container} from "react-bootstrap";
 import {Row} from "react-bootstrap";
 import {Col} from "react-bootstrap";
 import {ListGroup} from "react-bootstrap";
-import {Button} from "react-bootstrap";
 import {Post} from "../post/post";
 import WritePost from "../post/writePost"
-import Modal from "react-bootstrap/Modal";
 import UpdateInfoModal from "./updateInfoModal";
 
 
 export class UserProfile extends React.Component{
     state={
         user: {},
-        posts:[]
+        posts:[],
+        username: this.props.match.params.username
     };
-
     cookiesToJson = () => Object.fromEntries(document.cookie.split(/; */).map((c) => {
         const [key, ...v] = c.split('=');
         return [key, decodeURIComponent(v.join('='))];
@@ -28,9 +26,8 @@ export class UserProfile extends React.Component{
         return  username ;
     };
 
-
     getUserInfo=()=>{
-        axios.get(`http://localhost:8091/api/user/${this.isAuthorized()}`,
+        axios.get(`http://localhost:8091/api/user/${this.state.username}`,
             { withCredentials: true }).then(response => {
             this.setState({user: response.data}
             )
@@ -38,7 +35,7 @@ export class UserProfile extends React.Component{
     };
 
     getUserPosts=()=>{
-        axios.get(`http://localhost:8091/api/posts/${this.isAuthorized()}`,
+        axios.get(`http://localhost:8091/api/posts/${this.state.username}`,
             { withCredentials: true }).then(response => {
             this.setState({posts: response.data}
             )
@@ -47,15 +44,15 @@ export class UserProfile extends React.Component{
 
     componentDidMount() {
         this.getUserInfo();
-        this.isAuthorized();
         this.getUserPosts();
     }
 
     formatDate(){
        var options = { month: 'long', year: 'numeric', day: 'numeric'};
        return new Date(this.state.user.birthDate).toLocaleDateString('en-GB', [],options)
-       // return this.state.user.birthDate.format(new Date(), 'MMMM Do, YYYY H:mma')
     }
+
+    hasUserAccess = () => this.state.username === this.isAuthorized();
 
     render() {
         return(
@@ -98,7 +95,10 @@ export class UserProfile extends React.Component{
                 </Row>
                 <br/>
                 <div className="align-content-center" style={{height: "30%",  margin: "20px"}}>
-                    <WritePost></WritePost>
+                    {' '}
+                    {this.hasUserAccess()
+                    &&
+                    <WritePost></WritePost>}
                 <br/>
                 {this.state.posts.map(element => (
                     <Post
@@ -108,7 +108,6 @@ export class UserProfile extends React.Component{
                     </Post>))}
                 </div>
             </Container>
-
         )
     }
 }

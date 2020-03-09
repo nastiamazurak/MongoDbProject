@@ -50,7 +50,8 @@ export class Post extends React.Component{
                 <Card border="primary">
                     <Card.Header>
                         <div className="d-flex align-self-center" style={{height: '20px'}}>
-                            <div className=" mr-auto p-2">{this.props.author}</div>
+                            <div className=" mr-auto p-2"><h5>
+                                <Link style={{color: "#0097a7"}} to={`user/${this.props.author}`}>@{this.props.author}</Link></h5></div>
                             <div className="p-2">{this.formatDate()}</div>
                         </div>
                     </Card.Header>

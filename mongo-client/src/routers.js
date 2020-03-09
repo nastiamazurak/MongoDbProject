@@ -19,7 +19,7 @@ export class Routers extends React.Component {
                     <Route path="/registration" component={Registration} />
                     <Route path="/home" component={Home} />
                     <Route path="/posts" component={Post}/>
-                    <Route path="/user" component={UserProfile}/>
+                    <Route path="/user/:username"  render={props => <UserProfile {...props} username={this.props.username} />}/>
 
                 </Switch>
             </BrowserRouter>

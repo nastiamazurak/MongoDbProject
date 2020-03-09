@@ -1,5 +1,6 @@
 import React from "react";
 import ListGroup from "react-bootstrap/ListGroup";
+import {Link} from "react-router-dom";
 export class Comment extends React.Component{
 
     state={
@@ -16,7 +17,8 @@ export class Comment extends React.Component{
         return (
             <div>
                 <div className="d-flex align-self-center" style={{height: '20px'}}>
-                    <div className=" mr-auto p-2"><h6>{this.props.nickname}</h6></div>
+                    <div className=" mr-auto p-2"><h6>
+                        <Link style={{color: "#0097a7"}} to={`user/${this.props.nickname}`}>@{this.props.nickname}</Link></h6></div>
                     <div className="p-2">{this.formatDate()}</div>
                 </div>
                 <br/>
