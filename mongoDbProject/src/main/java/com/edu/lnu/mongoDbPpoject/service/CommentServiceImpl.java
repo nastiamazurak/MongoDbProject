@@ -47,4 +47,16 @@ public class CommentServiceImpl  implements CommentService {
     public Comment editComment(String commentId, String postId, String text) {
         return null;
     }
+
+    @Override
+    public int countComments(String username) {
+        List<Post> posts = postRepository.getAllByAuthorNickName(username);
+        int count = 0;
+        for (Post s:  posts){
+            for (Comment c: s.getComments()){
+                count++;
+            }
+        }
+        return count;
+    }
 }

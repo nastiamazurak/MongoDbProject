@@ -60,7 +60,6 @@ export class UpdateInfoModal extends React.Component{
         })
     };
 
-
     updateUserInfo=()=>{
         const data = {
             name: this.state.name,
@@ -109,6 +108,7 @@ export class UpdateInfoModal extends React.Component{
                                     Name
                                 </Form.Label>
                                 <Form.Control
+                                    value={this.props.firstName}
                                     onChange={this.setName}>
                                 </Form.Control>
                             </Form.Group>
@@ -117,6 +117,7 @@ export class UpdateInfoModal extends React.Component{
                                     Surname
                                 </Form.Label>
                                 <Form.Control
+                                    value={this.props.surname}
                                     onChange={this.setSurname}>
                                 </Form.Control>
                             </Form.Group>
@@ -125,6 +126,7 @@ export class UpdateInfoModal extends React.Component{
                                     City
                                 </Form.Label>
                                 <Form.Control
+                                    value={this.props.city}
                                     onChange={this.setCity}>
                                 </Form.Control>
                             </Form.Group>
@@ -133,6 +135,7 @@ export class UpdateInfoModal extends React.Component{
                                     Country
                                 </Form.Label>
                                 <Form.Control
+                                    value={this.props.country}
                                     onChange={this.setCountry}>
                                 </Form.Control>
                             </Form.Group>
@@ -141,6 +144,7 @@ export class UpdateInfoModal extends React.Component{
                                     Birth Date
                                 </Form.Label>
                                 <Form.Control
+                                    value={this.props.birthDate}
                                     onChange={this.setBirthDate}>
                                 </Form.Control>
                             </Form.Group>

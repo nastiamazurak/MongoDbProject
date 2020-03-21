@@ -41,7 +41,7 @@ export class Home extends React.Component {
                 </Post>{' '}
                         {element.comments!=null &&
                             <div>
-                        <CommentBox comments={element.comments}/>
+                        <CommentBox id = {element.id} comments={element.comments}/>
                                 </div>}
                         <br/>
                         <br/>

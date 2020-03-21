@@ -4,19 +4,30 @@ import Card from "react-bootstrap/Card";
 import {Button} from "react-bootstrap";
 import ListGroup from "react-bootstrap/ListGroup";
 import {Comment} from "./comment";
-import {WriteComment} from "./writeComment";
 
 export class CommentBox extends React.Component{
 
+    state={
+        commentsNumber: undefined
+    };
+
     render(){
+        let CommentButton;
+        if (this.props.comments.length > 1) {
+            CommentButton = <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                {this.props.comments.length} Comments
+            </Accordion.Toggle>;
+        } else {
+            CommentButton = <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                {this.props.comments.length} Comment
+            </Accordion.Toggle>;
+        }
         return(
 
             <Accordion defaultActiveKey="1">
             <Card style={{ margin: "6px"}}>
                 <Card.Header>
-                <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                    Comments
-                </Accordion.Toggle>
+                    {CommentButton}
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
                 <ListGroup variant="flush">
@@ -29,8 +40,5 @@ export class CommentBox extends React.Component{
                 </Accordion.Collapse>
             </Card>
             </Accordion>
-
-
-
-    )}
+        )}
 }

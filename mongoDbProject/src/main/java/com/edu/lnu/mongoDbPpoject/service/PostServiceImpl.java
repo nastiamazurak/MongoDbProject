@@ -1,6 +1,7 @@
 package com.edu.lnu.mongoDbPpoject.service;
 
 import com.edu.lnu.mongoDbPpoject.model.Post;
+import com.edu.lnu.mongoDbPpoject.model.User;
 import com.edu.lnu.mongoDbPpoject.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,12 @@ public class PostServiceImpl implements PostService {
         String userName= userService.getCurrentUserName();
         Post post = repository.findPostByIdAndAuthorNickName(postId, userName);
         return post;
+    }
+
+    @Override
+    public int countPostsByUser(String username) {
+      List<Post> posts =repository.getAllByAuthorNickName(username);
+      return posts.size();
     }
 
     @Override

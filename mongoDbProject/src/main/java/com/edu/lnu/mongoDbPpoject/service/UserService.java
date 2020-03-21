@@ -9,4 +9,5 @@ public interface UserService {
     User updateUserInfo(User user, String username);
     User findUser(String feature);
     User getUserByNickName(String nickname);
+
 }

@@ -14,10 +14,10 @@ export class Routers extends React.Component {
             <BrowserRouter>
                 <Head />
                 <Switch>
+                    <Route path="/home" component={Home} />
                     {/*<Route exact path="/" component={Base} />*/}
                     <Route path="/login" component={Login} />
                     <Route path="/registration" component={Registration} />
-                    <Route path="/home" component={Home} />
                     <Route path="/posts" component={Post}/>
                     <Route path="/user/:username"  render={props => <UserProfile {...props} username={this.props.username} />}/>
 

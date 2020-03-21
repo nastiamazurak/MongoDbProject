@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("api/posts")
 public class PostController {
     @Autowired
-    private PostServiceImpl service;
+    private PostServiceImpl postService;
     @Autowired
     private CookieProvider cookie;
     @Autowired
@@ -23,31 +23,30 @@ public class PostController {
 
     @GetMapping("/all")
     public List<Post> getAllPosts(){
-       return service.showAll();
+       return postService.showAll();
     }
 
     @GetMapping("/{nickname}")
     public List<Post> getAllByUser(@PathVariable  String nickname){
-        return service.getAllByUserNickname(nickname);
+        return postService.getAllByUserNickname(nickname);
     }
 
     @PostMapping("/create")
     public ResponseEntity<Post> createPost(@RequestBody Post post){
 
-        return ResponseEntity.status(HttpStatus.OK).body(service.createPost(post));
+        return ResponseEntity.status(HttpStatus.OK).body(postService.createPost(post));
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Post> deletePost(@PathVariable String id){
-        return ResponseEntity.status(HttpStatus.OK).body(service.deletePost(id));
+        return ResponseEntity.status(HttpStatus.OK).body(postService.deletePost(id));
     }
     @PutMapping("/{id}")
     public ResponseEntity<Post> editPost(@RequestBody String text, @PathVariable String id){
-        return ResponseEntity.status(HttpStatus.OK).body(service.updatePost(text, id));
+        return ResponseEntity.status(HttpStatus.OK).body(postService.updatePost(text, id));
     }
     @PostMapping("/comment")
     public ResponseEntity<Post> createComment(@RequestBody String comment[], HttpServletRequest request){
         String username = cookie.readCookie(request, "username");
         return ResponseEntity.status(HttpStatus.OK).body(commentService.addComment(comment[0],comment[1], username));
     }
-
 }

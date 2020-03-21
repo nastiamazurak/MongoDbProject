@@ -11,6 +11,7 @@ public interface PostService {
     Post updatePost(String text, String postId);
     Post deletePost(String postId);
     Post getPostIfUserHasAccess(String postId);
+    int countPostsByUser(String username);
 
 
 

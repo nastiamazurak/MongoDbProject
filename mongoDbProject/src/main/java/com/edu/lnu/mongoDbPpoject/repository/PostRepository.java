@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface PostRepository extends MongoRepository<Post, String> {
     List<Post> getAllByAuthorNickNameOrderByDateDesc(String authorNickName);
+    List<Post> getAllByAuthorNickName(String nickname);
     List<Post> findByTextContains(String text);
     List<Post> findAllByOrderByDateDesc();
     void deleteById(String id);

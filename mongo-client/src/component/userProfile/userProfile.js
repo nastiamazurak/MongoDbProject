@@ -8,13 +8,15 @@ import {ListGroup} from "react-bootstrap";
 import {Post} from "../post/post";
 import WritePost from "../post/writePost"
 import UpdateInfoModal from "./updateInfoModal";
+import {CommentBox} from "../post/commentBox";
 
 
 export class UserProfile extends React.Component{
     state={
         user: {},
         posts:[],
-        username: this.props.match.params.username
+        username: this.props.match.params.username,
+        commentsNumber: undefined
     };
     cookiesToJson = () => Object.fromEntries(document.cookie.split(/; */).map((c) => {
         const [key, ...v] = c.split('=');
@@ -64,18 +66,21 @@ export class UserProfile extends React.Component{
                     </Col>
                     <Col style={{height: "40%", width:"40%"}}>
                         <h1 style={{marginTop:"5%"}}>User Information</h1>
-                        {/*<h1 style={{marginTop:"5%"}} >{this.state.user.name} {this.state.user.surname}</h1>
-                        <h3 style={{color:"#4db6ac"}}>@{this.state.user.nickName}</h3>
-                        <br/>*/}
                         <br/>
                         <ListGroup variant="flush">
                             <ListGroup.Item>Birth Date: {this.formatDate()}</ListGroup.Item>
                             <ListGroup.Item>Country: {this.state.user.country}</ListGroup.Item>
                             <ListGroup.Item>City: {this.state.user.city}</ListGroup.Item>
+                            {' '}
+                            {this.hasUserAccess()
+                            &&
                             <ListGroup.Item>
-                                {/*<Button onCLick="">Update data</Button>*/}
-                                <UpdateInfoModal/>
-                            </ListGroup.Item>
+                                <UpdateInfoModal firstName={this.state.user.name}
+                                surname = {this.state.user.surname}
+                                city = {this.state.user.city}
+                                country = {this.state.user.country}
+                                birthDate = {this.formatDate()}/>
+                            </ListGroup.Item>}
                         </ListGroup>
                     </Col>
                 </Row>
@@ -89,7 +94,7 @@ export class UserProfile extends React.Component{
                         <br/>
                         <h3>User Statistics</h3>
                         <ListGroup>
-                            <ListGroup.Item>No style</ListGroup.Item>
+                            <ListGroup.Item>Total posts: {this.state.posts.length}</ListGroup.Item>
                         </ListGroup>
                     </div>
                 </Row>
@@ -101,11 +106,20 @@ export class UserProfile extends React.Component{
                     <WritePost></WritePost>}
                 <br/>
                 {this.state.posts.map(element => (
-                    <Post
-                        author = {element.authorNickName}
-                        date = {element.date}
-                        text = {element.text}>
-                    </Post>))}
+                    <div>
+                        <Post
+                            author = {element.authorNickName}
+                            date = {element.date}
+                            text = {element.text}
+                            id = {element.id}>
+                        </Post>{' '}
+                        {element.comments!=null &&
+                        <div>
+                            <CommentBox id = {element.id} comments={element.comments}/>
+                        </div>}
+                        <br/>
+                        <br/>
+                    </div>))}
                 </div>
             </Container>
         )
