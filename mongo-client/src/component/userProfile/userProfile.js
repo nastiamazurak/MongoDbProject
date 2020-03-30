@@ -9,27 +9,40 @@ import {Post} from "../post/post";
 import WritePost from "../post/writePost"
 import UpdateInfoModal from "./updateInfoModal";
 import {CommentBox} from "../post/commentBox";
+import jwt from "jwt-decode";
 
 
 export class UserProfile extends React.Component{
-    state={
-        user: {},
-        posts:[],
-        username: this.props.match.params.username,
-        commentsNumber: undefined
-    };
+
     cookiesToJson = () => Object.fromEntries(document.cookie.split(/; */).map((c) => {
         const [key, ...v] = c.split('=');
         return [key, decodeURIComponent(v.join('='))];
     }));
 
-    isAuthorized = () => {
-        const username = this.cookiesToJson().username;
-        return  username ;
+    state = {
+        role:
+            (this.cookiesToJson().JWT && jwt(this.cookiesToJson().JWT).roles),
+        user: {},
+        currentUser: {},
+        posts:[],
+        username: this.props.match.params.username,
+        commentsNumber: undefined
     };
 
+
+    isAuthorized = () => {
+        const jwt = this.cookiesToJson().JWT;
+        return jwt && jwt.length > 10;
+    };
+
+    getCurrentUser = () => {
+        axios.get('http://localhost:8091/api/v1/user', { withCredentials: true })
+            .then(response => this.setState({ currentUser: response.data }));
+    };
+
+
     getUserInfo=()=>{
-        axios.get(`http://localhost:8091/api/user/${this.state.username}`,
+        axios.get(`http://localhost:8091/api/v1/user/${this.state.username}`,
             { withCredentials: true }).then(response => {
             this.setState({user: response.data}
             )
@@ -45,8 +58,11 @@ export class UserProfile extends React.Component{
     };
 
     componentDidMount() {
+        this.isAuthorized();
+        this.cookiesToJson();
         this.getUserInfo();
         this.getUserPosts();
+        this.getCurrentUser();
     }
 
     formatDate(){
@@ -54,9 +70,11 @@ export class UserProfile extends React.Component{
        return new Date(this.state.user.birthDate).toLocaleDateString('en-GB', [],options)
     }
 
-    hasUserAccess = () => this.state.username === this.isAuthorized();
+    hasUserAccess = () => this.state.username === this.state.currentUser.nickName;
 
     render() {
+        console.log(this.state.user.name);
+
         return(
             <Container>
                 <Row>
@@ -103,7 +121,7 @@ export class UserProfile extends React.Component{
                     {' '}
                     {this.hasUserAccess()
                     &&
-                    <WritePost></WritePost>}
+                    <WritePost posts = {this.getUserPosts()}></WritePost>}
                 <br/>
                 {this.state.posts.map(element => (
                     <div>
@@ -115,7 +133,7 @@ export class UserProfile extends React.Component{
                         </Post>{' '}
                         {element.comments!=null &&
                         <div>
-                            <CommentBox id = {element.id} comments={element.comments}/>
+                            <CommentBox commentsAll = {this.state.posts.comments} id = {element.id} comments={element.comments}/>
                         </div>}
                         <br/>
                         <br/>

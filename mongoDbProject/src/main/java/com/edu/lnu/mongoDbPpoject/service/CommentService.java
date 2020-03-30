@@ -4,7 +4,7 @@ import com.edu.lnu.mongoDbPpoject.model.Comment;
 import com.edu.lnu.mongoDbPpoject.model.Post;
 
 public interface CommentService {
-    Post addComment(String postId, String text, String username);
+    Post addComment(String postId, String text);
     Comment deleteComment(String postId, String commentId);
     Comment editComment(String commentId, String postId, String text);
     int countComments(String username);

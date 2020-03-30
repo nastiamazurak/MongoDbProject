@@ -2,7 +2,8 @@ import React from "react";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import {Redirect} from 'react-router-dom'
-
+import {Button} from "react-bootstrap";
+import { Link } from 'react-router-dom';
 export class Login extends React.Component {
     state = {
         nickName: undefined,
@@ -25,7 +26,7 @@ export class Login extends React.Component {
             password: this.state.password
         };
 
-        axios.post(`http://localhost:8091/api/auth/login`,
+        axios.post(`http://localhost:8091/api/v1/auth/sign-in`,
             data,
             {withCredentials: true})
             .then(response => {
@@ -91,7 +92,8 @@ export class Login extends React.Component {
                 >
                     Log in
                 </button>
-
+                <p>Don't have an account?</p>
+                <Button as={Link} to="/registration" className="btn btn-success" size="sm">Register</Button>
                 <div>
                     {' '}
                     {this.isVisible()

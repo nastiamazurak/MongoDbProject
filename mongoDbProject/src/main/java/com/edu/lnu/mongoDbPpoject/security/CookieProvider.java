@@ -12,7 +12,7 @@ public class CookieProvider {
     @Value("${expired.time.for.cookie}")
     private int EXPIRED_TIME_FOR_COOKIE;
 
-    public Cookie createCookie(String key, String token) {
+    public Cookie createCookie(String key,String token) {
         Cookie cookie = new Cookie(key, token);
         cookie.setMaxAge(EXPIRED_TIME_FOR_COOKIE);
         cookie.setPath("/");

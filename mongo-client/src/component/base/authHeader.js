@@ -9,21 +9,30 @@ import NavLink from "react-bootstrap/NavLink";
 
 export class AuthHeader extends React.Component {
 
-    cookiesToJson = () => Object.fromEntries(document.cookie.split(/; */).map((c) => {
-        const [key, ...v] = c.split('=');
-        return [key, decodeURIComponent(v.join('='))];
-    }));
-
-    isAuthorized = () => {
-        const username = this.cookiesToJson().username;
-        return  username ;
+    state = {
+        user: '',
     };
+
+    componentDidMount() {
+        this.getUser();
+    }
+
+    getUser = () => {
+        axios.get('http://localhost:8091/api/v1/user', { withCredentials: true })
+            .then(response => this.setState({ user: response.data }));
+    };
+
+    deleteCookie = () => {
+        axios.get('http://localhost:8091/api/v1/auth/sign-out', { withCredentials: true });
+    };
+
     render() {
         return (
             <Dropdown as={NavItem}>
-                <Dropdown.Toggle as={NavLink}>{this.props.username}</Dropdown.Toggle>
+                <Dropdown.Toggle as={NavLink}>{this.state.user.nickName}</Dropdown.Toggle>
                 <Dropdown.Menu className="dropdown-menu-right">
-                    <Dropdown.Item as={Link} to={`user/${this.isAuthorized()}`}>My profile</Dropdown.Item>
+                    <Dropdown.Item as={Link} to={`user/${this.state.user.nickName}`}>My profile</Dropdown.Item>
+                    <Dropdown.Item as={Link} to={`login`}>Log out</Dropdown.Item>
                     <Dropdown.Divider/>
                 </Dropdown.Menu>
             </Dropdown>

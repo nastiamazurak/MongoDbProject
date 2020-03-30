@@ -15,7 +15,7 @@ export class UpdateInfoModal extends React.Component{
         this.state = {
             show: false,
             valid: undefined,
-            name: '',
+            name: undefined,
             surname: '',
             city: '',
             country: '',
@@ -36,7 +36,7 @@ export class UpdateInfoModal extends React.Component{
     setName=(e)=>{
         this.setState({
             name: e.target.value,
-    })
+        })
     };
     setSurname=(e)=>{
         this.setState({

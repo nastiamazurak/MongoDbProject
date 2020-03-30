@@ -1,9 +1,11 @@
 package com.edu.lnu.mongoDbPpoject.controller;
 
 import com.edu.lnu.mongoDbPpoject.model.Post;
+import com.edu.lnu.mongoDbPpoject.model.User;
 import com.edu.lnu.mongoDbPpoject.security.CookieProvider;
 import com.edu.lnu.mongoDbPpoject.service.CommentServiceImpl;
 import com.edu.lnu.mongoDbPpoject.service.PostServiceImpl;
+import com.edu.lnu.mongoDbPpoject.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,17 +22,18 @@ public class PostController {
     private CookieProvider cookie;
     @Autowired
     private CommentServiceImpl commentService;
+    @Autowired
+    private UserServiceImpl userService;
 
     @GetMapping("/all")
     public List<Post> getAllPosts(){
        return postService.showAll();
     }
 
-    @GetMapping("/{nickname}")
-    public List<Post> getAllByUser(@PathVariable  String nickname){
-        return postService.getAllByUserNickname(nickname);
+    @GetMapping("/{username}")
+    public List<Post> getAllByUser(@PathVariable String username){
+        return postService.getAllByUserNickname(username);
     }
-
     @PostMapping("/create")
     public ResponseEntity<Post> createPost(@RequestBody Post post){
 
@@ -45,8 +48,7 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(postService.updatePost(text, id));
     }
     @PostMapping("/comment")
-    public ResponseEntity<Post> createComment(@RequestBody String comment[], HttpServletRequest request){
-        String username = cookie.readCookie(request, "username");
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.addComment(comment[0],comment[1], username));
+    public ResponseEntity<Post> createComment(@RequestBody String comment[]){
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.addComment(comment[0],comment[1]));
     }
 }

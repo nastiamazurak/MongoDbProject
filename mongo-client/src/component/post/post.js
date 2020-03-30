@@ -9,7 +9,7 @@ import axios from "axios";
 export class Post extends React.Component{
 
     state={
-        posts: undefined,
+    posts: this.props.posts,
         text: undefined,
         date: this.props.date,
         comment_data: [],

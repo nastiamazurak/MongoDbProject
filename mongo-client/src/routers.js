@@ -14,7 +14,7 @@ export class Routers extends React.Component {
             <BrowserRouter>
                 <Head />
                 <Switch>
-                    <Route path="/home" component={Home} />
+                    <Route exact path="/" component={Home} />
                     {/*<Route exact path="/" component={Base} />*/}
                     <Route path="/login" component={Login} />
                     <Route path="/registration" component={Registration} />

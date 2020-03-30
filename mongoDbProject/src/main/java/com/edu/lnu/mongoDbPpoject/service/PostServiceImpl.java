@@ -20,9 +20,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post createPost(Post post) {
-        if (!post.getText().equals("")) {
+        User user = userService.getCurrentUser();
+        if (!post.getText().equals("") && user != null) {
             post.setDate(new Timestamp(new Date().getTime()));
-           // post.setAuthorNickName(userService.getCurrentUserName());
+            post.setAuthorNickName(user.getNickName());
             return repository.save(post);
         }
         else{
@@ -32,7 +33,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post getPostIfUserHasAccess(String postId) {
-        String userName= userService.getCurrentUserName();
+        String userName= userService.getCurrentUser().getNickName();
         Post post = repository.findPostByIdAndAuthorNickName(postId, userName);
         return post;
     }

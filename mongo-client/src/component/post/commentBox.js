@@ -8,7 +8,8 @@ import {Comment} from "./comment";
 export class CommentBox extends React.Component{
 
     state={
-        commentsNumber: undefined
+        commentsNumber: undefined,
+        commentsAll: this.props.commentsAll
     };
 
     render(){

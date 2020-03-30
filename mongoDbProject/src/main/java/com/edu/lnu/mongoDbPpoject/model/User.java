@@ -33,6 +33,6 @@ public class User  {
     private String city;
     private String country;
     @DBRef
-    private Set<Role> roles;
+    private Role role;
     private boolean enabled;
 }

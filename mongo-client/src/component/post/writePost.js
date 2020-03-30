@@ -1,25 +1,21 @@
 import React from "react";
 import {Button, FormControl, InputGroup} from "react-bootstrap";
 import axios from "axios";
-export class WritePost extends React.Component{
-    state={
-        text: "",
-        username: ""
-    }
-    cookiesToJson = () => Object.fromEntries(document.cookie.split(/; */).map((c) => {
-        const [key, ...v] = c.split('=');
-        return [key, decodeURIComponent(v.join('='))];
-    }));
 
-    isAuthorized = () => {
-        const username = this.cookiesToJson().username;
-        return  username ;
-    };
+export class WritePost extends React.Component{
+
+        state = {
+            text: "",
+            username: "",
+            post: undefined,
+            status: undefined
+        };
+
 
     createPost=()=> {
         const data = {
             text: this.state.text,
-            authorNickName:this.isAuthorized(),
+            //authorNickName:this.isAuthorized(),
             status: 0,
         };
         axios.post('http://localhost:8091/api/posts/create',
@@ -29,18 +25,21 @@ export class WritePost extends React.Component{
                 this.setState({
                     status: response.status,
                 });
-            })
+            });
+        this.state.post = this.state.text;
     };
+
     setPostText = (e) => {
         this.setState({ text: e.target.value });
     };
+
+
     componentDidMount() {
         this.createPost();
-        this.isAuthorized();
-
     }
 
     render(){
+        console.log(this.state.post);
         return (
             <InputGroup className="md-lg-3">
                 <FormControl onChange={this.setPostText}

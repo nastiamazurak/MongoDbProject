@@ -11,7 +11,7 @@ import {WriteComment} from "../post/writeComment";
 
 export class Home extends React.Component {
     state={
-        posts: []
+        posts: [],
     };
 
     getPosts = ()=> {
@@ -23,14 +23,16 @@ export class Home extends React.Component {
     };
     componentDidMount() {
         this.getPosts();
+      ;
 
     }
+
     render() {
         return (
             <Container style={{width: "60%"}}>
             <div className='align-content-center'  style={{height: "100px",  margin: "20px"}}>
-                <WritePost></WritePost>
-                <br/>
+                <WritePost posts = {this.getPosts()}></WritePost>
+                    <br/>
                 {this.state.posts.map(element => (
                     <div>
                 <Post
@@ -41,7 +43,7 @@ export class Home extends React.Component {
                 </Post>{' '}
                         {element.comments!=null &&
                             <div>
-                        <CommentBox id = {element.id} comments={element.comments}/>
+                        <CommentBox commentsAll = {this.state.posts.comments} id = {element.id} comments={element.comments}/>
                                 </div>}
                         <br/>
                         <br/>

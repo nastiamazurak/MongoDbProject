@@ -2,14 +2,15 @@ import React from 'react';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import {Link, Redirect} from 'react-router-dom'
+import {Button} from "react-bootstrap";
 
 export class Registration extends React.Component {
     state = {
         nickName: undefined,
         password: undefined,
         confirmPassword: undefined,
-        firstName: undefined,
-        lastName: undefined,
+        name: undefined,
+        surname: undefined,
         dublicatedNickname: undefined,
         invalidPassword: undefined,
         status: undefined,
@@ -30,11 +31,11 @@ export class Registration extends React.Component {
     };
 
     setFirstName = (e) => {
-        this.setState({ firstName: e.target.value });
+        this.setState({ name: e.target.value });
     };
 
     setLastName = (e) => {
-        this.setState({ lastName: e.target.value });
+        this.setState({ surname: e.target.value });
     };
 
     setConfirmPassword = (e) => {
@@ -44,8 +45,8 @@ export class Registration extends React.Component {
     isValidForm = () => this.state.confirmPassword === this.state.password
         && this.isEmptyField();
 
-    isEmptyField = () => this.state.firstName !== undefined && this.state.firstName !== ''
-        && this.state.lastName !== undefined && this.state.lastName !== ''
+    isEmptyField = () => this.state.name !== undefined && this.state.name !== ''
+        && this.state.surname !== undefined && this.state.surname !== ''
         && this.state.nickname !== undefined && this.state.nickname !== ''
         && this.state.password !== undefined && this.state.password !== ''
         && this.state.confirmPassword !== undefined && this.state.confirmPassword !== '';
@@ -55,13 +56,13 @@ export class Registration extends React.Component {
 
     insertRegistrationData = () => {
         const data = {
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
+            name: this.state.name,
+            surname: this.state.surname,
             nickName: this.state.nickname,
             password: this.state.password,
             status: 0,
         };
-        axios.post('http://localhost:8091/api/auth/register',
+        axios.post('http://localhost:8091/api/v1/auth/register',
             data,
             {withCredentials: true})
             .then((response) => {
@@ -154,6 +155,8 @@ export class Registration extends React.Component {
                 >
                     Register
                 </button>
+                <p> Already have an account?</p>
+                <Button as={Link} to="/login" className="btn btn-success" size="sm">Login</Button>
 
                 <div>
                     {' '}

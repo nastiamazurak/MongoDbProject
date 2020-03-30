@@ -2,6 +2,7 @@ package com.edu.lnu.mongoDbPpoject.service;
 
 import com.edu.lnu.mongoDbPpoject.model.Comment;
 import com.edu.lnu.mongoDbPpoject.model.Post;
+import com.edu.lnu.mongoDbPpoject.model.User;
 import com.edu.lnu.mongoDbPpoject.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,8 @@ public class CommentServiceImpl  implements CommentService {
     UserServiceImpl userService;
 
     @Override
-    public Post addComment(String postId, String text, String username) {
+    public Post addComment(String postId, String text) {
+            User user = userService.getCurrentUser();
             Post post = postRepository.getById(postId);
 
             if (post.getComments() == null) {
@@ -29,7 +31,7 @@ public class CommentServiceImpl  implements CommentService {
 
             List<Comment> comments = post.getComments();
             Comment comment = new Comment();
-            comment.setAuthor_nickname(username);
+            comment.setAuthor_nickname(user.getNickName());
             comment.setDate(new Timestamp(new Date().getTime()));
             comment.setText(text);
             comments.add(comment);

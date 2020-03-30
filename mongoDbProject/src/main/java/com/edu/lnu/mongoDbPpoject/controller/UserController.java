@@ -8,13 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("api/v1/user")
 public class UserController {
 
     @Autowired
@@ -24,19 +19,17 @@ public class UserController {
     private CookieProvider cookie;
 
     @GetMapping()
-    public ResponseEntity getUser(){
-        Map<Object, Object> model = new HashMap<>();
-        model.put("username", userService.getCurrentUserName());
-        return ResponseEntity.ok(model);
+    public User getCurrentUser(){
+        return  userService.getCurrentUser();
     }
     @GetMapping("/{username}")
     public ResponseEntity<User> getUserByUserName(@PathVariable String username){
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserByNickName(username));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserInfo(username));
     }
     @PutMapping()
-    public ResponseEntity<User> updateUserInfo(@RequestBody User user, HttpServletRequest request){
-        String username = cookie.readCookie(request, "username");
-        return ResponseEntity.status(HttpStatus.OK).body(userService.updateUserInfo(user, username));
+    public ResponseEntity<User> updateUserInfo(@RequestBody User user){
+        User userOld = userService.getCurrentUser();
+        return ResponseEntity.status(HttpStatus.OK).body(userService.updateUserInfo(user, userOld.getNickName()));
     }
 
 }

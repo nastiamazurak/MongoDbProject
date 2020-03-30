@@ -1,18 +1,20 @@
 package com.edu.lnu.mongoDbPpoject.service;
 
+import com.edu.lnu.mongoDbPpoject.exception.UserNotFoundByUsername;
+import com.edu.lnu.mongoDbPpoject.exception.constant.ErrorMessage;
+import com.edu.lnu.mongoDbPpoject.exception.IncorrectPasswordException;
 import com.edu.lnu.mongoDbPpoject.model.User;
 import com.edu.lnu.mongoDbPpoject.repository.RoleRepository;
 import com.edu.lnu.mongoDbPpoject.repository.UserRepository;
-import com.edu.lnu.mongoDbPpoject.security.CookieProvider;
-import com.edu.lnu.mongoDbPpoject.security.CustomUserDetailsService;
+import com.edu.lnu.mongoDbPpoject.security.AuthBody;
+import com.edu.lnu.mongoDbPpoject.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,20 +26,8 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
 
     @Override
-    public User getUserInfo(String id) {
-        return userRepository.findBy_id(id);
-    }
-
-    @Override
-    public String getCurrentUserName() {
-        String username;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
-        } else {
-           username = principal.toString();
-        }
-        return username;
+    public User getUserInfo(String username) {
+        return userRepository.findByNickName(username);
     }
 
     @Override
@@ -53,22 +43,56 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUser(String feature) {
-        if (userRepository.findByName(feature) != null){
+        if (userRepository.findByName(feature) != null) {
             return userRepository.findByName(feature);
-        }
-        else if (userRepository.findBySurname(feature)!= null){
+        } else if (userRepository.findBySurname(feature) != null) {
             return userRepository.findBySurname(feature);
-        }
-        else if (userRepository.findByNickName(feature)!= null){
+        } else if (userRepository.findByNickName(feature) != null) {
             return userRepository.findByNickName(feature);
-        }
-        else {
+        } else {
             return null;
         }
     }
+
     @Override
-    public User getUserByNickName(String nickname){
-        return userRepository.findByNickName(nickname);
+    public User findUserByUserName(String username){
+        return  userRepository.findByNickName(username);
     }
+
+    @Override
+    public boolean registerUser(User user) {
+        ;
+        user.setRole(roleRepository.findByRole("USER"));
+        user.setName(user.getName());
+        user.setSurname(user.getSurname());
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user = userRepository.save(user);
+        return true;
+    }
+
+    @Override
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+        return principal.getUser();
+    }
+
+    @Override
+    public boolean comparePasswordLogin(AuthBody body, PasswordEncoder passwordEncoder) {
+        if(!passwordEncoder.matches(body.getPassword(), findUserByUserName(body.getNickName()).getPassword())){
+            throw  new IncorrectPasswordException(ErrorMessage.INVALID_USERNAME_OR_PASSWORD);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean existsUserByUsername(String username) {
+        if(!userRepository.existsByNickName(username)){
+            throw  new UserNotFoundByUsername("User not found with username " + username);
+        }else
+            return true;
+    }
+
 }
 
