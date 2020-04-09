@@ -37,16 +37,16 @@ export class WritePost extends React.Component{
     componentDidMount() {
         this.createPost();
     }
+    isEmptyField = () => this.state.text !== undefined && this.state.text !== '';
 
     render(){
-        console.log(this.state.post);
         return (
             <InputGroup className="md-lg-3">
                 <FormControl onChange={this.setPostText}
                     placeholder="Write a post.."
                     aria-label=""/>
                 <InputGroup.Append>
-                    <Button onClick={this.createPost} variant="outline-secondary" style={{background: "#40babf"}}>Post</Button>
+                    <Button disabled={!this.isEmptyField()} onClick={this.createPost} variant="outline-secondary" style={{background: "#40babf"}}>Post</Button>
                 </InputGroup.Append>
             </InputGroup>
         )

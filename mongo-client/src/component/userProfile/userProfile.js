@@ -6,7 +6,6 @@ import {Row} from "react-bootstrap";
 import {Col} from "react-bootstrap";
 import {ListGroup} from "react-bootstrap";
 import {Post} from "../post/post";
-import WritePost from "../post/writePost"
 import UpdateInfoModal from "./updateInfoModal";
 import {CommentBox} from "../post/commentBox";
 import jwt from "jwt-decode";
@@ -69,6 +68,10 @@ export class UserProfile extends React.Component{
        var options = { month: 'long', year: 'numeric', day: 'numeric'};
        return new Date(this.state.user.birthDate).toLocaleDateString('en-GB', [],options)
     }
+   // formatDate(){
+     //   var options = { year: 'numeric', month: 'long', day: 'numeric' };
+      //  return new Date(this.state.date).toDateString([],options);
+    //}
 
     hasUserAccess = () => this.state.username === this.state.currentUser.nickName;
 
@@ -86,14 +89,14 @@ export class UserProfile extends React.Component{
                         <h1 style={{marginTop:"5%"}}>User Information</h1>
                         <br/>
                         <ListGroup variant="flush">
-                            <ListGroup.Item>Birth Date: {this.formatDate()}</ListGroup.Item>
+                            <ListGroup.Item>Birth Date: {this.state.user.birthDate}</ListGroup.Item>
                             <ListGroup.Item>Country: {this.state.user.country}</ListGroup.Item>
                             <ListGroup.Item>City: {this.state.user.city}</ListGroup.Item>
                             {' '}
                             {this.hasUserAccess()
                             &&
                             <ListGroup.Item>
-                                <UpdateInfoModal firstName={this.state.user.name}
+                                <UpdateInfoModal name={this.state.user.name}
                                 surname = {this.state.user.surname}
                                 city = {this.state.user.city}
                                 country = {this.state.user.country}
@@ -112,17 +115,14 @@ export class UserProfile extends React.Component{
                         <br/>
                         <h3>User Statistics</h3>
                         <ListGroup>
-                            <ListGroup.Item>Total posts: {this.state.posts.length}</ListGroup.Item>
+                            <ListGroup.Item>
+                                <p>Total posts: {this.state.posts.length}</p>
+                            </ListGroup.Item>
                         </ListGroup>
                     </div>
                 </Row>
                 <br/>
                 <div className="align-content-center" style={{height: "30%",  margin: "20px"}}>
-                    {' '}
-                    {this.hasUserAccess()
-                    &&
-                    <WritePost posts = {this.getUserPosts()}></WritePost>}
-                <br/>
                 {this.state.posts.map(element => (
                     <div>
                         <Post

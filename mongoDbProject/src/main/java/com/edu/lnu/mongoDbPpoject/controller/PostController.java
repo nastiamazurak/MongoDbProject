@@ -19,11 +19,7 @@ public class PostController {
     @Autowired
     private PostServiceImpl postService;
     @Autowired
-    private CookieProvider cookie;
-    @Autowired
     private CommentServiceImpl commentService;
-    @Autowired
-    private UserServiceImpl userService;
 
     @GetMapping("/all")
     public List<Post> getAllPosts(){
@@ -34,9 +30,9 @@ public class PostController {
     public List<Post> getAllByUser(@PathVariable String username){
         return postService.getAllByUserNickname(username);
     }
+
     @PostMapping("/create")
     public ResponseEntity<Post> createPost(@RequestBody Post post){
-
         return ResponseEntity.status(HttpStatus.OK).body(postService.createPost(post));
     }
     @DeleteMapping("/{id}")
@@ -44,11 +40,16 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(postService.deletePost(id));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Post> editPost(@RequestBody String text, @PathVariable String id){
-        return ResponseEntity.status(HttpStatus.OK).body(postService.updatePost(text, id));
+    public ResponseEntity<Post> editPost(@RequestBody String postInfo[]){
+        return ResponseEntity.status(HttpStatus.OK).body(postService.updatePost(postInfo[0], postInfo[1]));
     }
     @PostMapping("/comment")
     public ResponseEntity<Post> createComment(@RequestBody String comment[]){
         return ResponseEntity.status(HttpStatus.OK).body(commentService.addComment(comment[0],comment[1]));
     }
+
+    /*@GetMapping("/comment/count/{postId}")
+    public ResponseEntity<Integer> countComment(@PathVariable String id){
+        return ResponseEntity.status(HttpStatus.OK).body(postService.countPostsByUser(username));
+    }*/
 }

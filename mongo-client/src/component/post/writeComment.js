@@ -26,6 +26,7 @@ export class WriteComment extends React.Component{
             })
     };
 
+
     render(){
         return (
             <div style = {{ margin: "5px"}}className = "justify-content-lg-center">

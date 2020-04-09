@@ -12,7 +12,7 @@ public interface PostService {
     Post deletePost(String postId);
     Post getPostIfUserHasAccess(String postId);
     int countPostsByUser(String username);
-
+    List<Post> getPostsByText(String text);
 
 
 }

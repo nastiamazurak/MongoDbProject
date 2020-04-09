@@ -53,6 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/v1/auth/sign-in",
+                        "api/v1/auth/sign-out",
                         "/api/v1/auth/register",
                         "/api/posts/all",
                         "/api/v1/user"

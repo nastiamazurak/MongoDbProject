@@ -1,5 +1,6 @@
 package com.edu.lnu.mongoDbPpoject.service;
 
+import com.edu.lnu.mongoDbPpoject.model.Comment;
 import com.edu.lnu.mongoDbPpoject.model.Post;
 import com.edu.lnu.mongoDbPpoject.model.User;
 import com.edu.lnu.mongoDbPpoject.repository.PostRepository;
@@ -44,6 +45,17 @@ public class PostServiceImpl implements PostService {
       return posts.size();
     }
 
+
+    public int countCommentTest(String postID){
+        Post post = repository.getById(postID);
+        return post.getComments().size();
+    }
+
+    @Override
+    public List<Post> getPostsByText(String text) {
+        return repository.findByTextContains(text);
+    }
+
     @Override
     public List<Post> showAll() {
         return repository.findAllByOrderByDateDesc();
@@ -55,7 +67,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post updatePost(String text, String postId) {
+    public Post updatePost(String postId, String text) {
         Post oldPost = getPostIfUserHasAccess(postId);
         oldPost.setText(text);
         return repository.save(oldPost);
@@ -67,4 +79,6 @@ public class PostServiceImpl implements PostService {
         repository.deleteById(postId);
         return oldPost;
     }
+
+
 }

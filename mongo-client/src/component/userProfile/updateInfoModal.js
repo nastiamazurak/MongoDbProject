@@ -6,70 +6,49 @@ import axios from 'axios';
 
 export class UpdateInfoModal extends React.Component{
 
-    constructor(props, context) {
-        super(props, context);
 
-        this.handleShow = this.handleShow.bind(this);
-        this.handleClose = this.handleClose.bind(this);
-
-        this.state = {
+    state = {
             show: false,
             valid: undefined,
             name: undefined,
             surname: '',
             city: '',
             country: '',
-            birthDate: ''
+            birthDate: '',
+            currentUser: {},
         };
-    }
-    handleShow() {
+
+
+    getCurrentUser = () => {
+        axios.get('http://localhost:8091/api/v1/user', { withCredentials: true })
+            .then(response => this.setState({ currentUser: response.data }));
+    };
+
+    handleUserInput = (e) => {
+        const { name } = e.target;
+        const { value } = e.target;
+        this.setState({ [name]: value });
+    };
+    handleShow=()=> {
         this.setState({ show: true });
     }
 
-    handleClose() {
+    handleClose=()=> {
         this.setState({
             show: false,
             valid: undefined,
         });
     }
 
-    setName=(e)=>{
-        this.setState({
-            name: e.target.value,
-        })
-    };
-    setSurname=(e)=>{
-        this.setState({
-            surname: e.target.value,
-        })
-    };
-    setCity=(e)=>{
-        this.setState({
-            city: e.target.value,
-        })
-    };
-    setCountry=(e)=>{
-        this.setState({
-            country: e.target.value,
-        })
-    };
-
-    setBirthDate=(e)=>{
-        this.setState({
-            birthDate: e.target.value,
-        })
-    };
-
     updateUserInfo=()=>{
         const data = {
             name: this.state.name,
             surname: this.state.surname,
-            //birthDate: this.state.birthDate,
+            birthDate: this.state.birthDate,
             city: this.state.city,
             country: this.state.country,
-            birthDate: this.state.birthDate
         };
-        axios.put('http://localhost:8091/api/user',
+        axios.put('http://localhost:8091/api/v1/user',
             data,
             { withCredentials: true })
             .then((response) => {
@@ -77,15 +56,19 @@ export class UpdateInfoModal extends React.Component{
                     {
                         name: response.data.name,
                         surname: response.data.surname,
-                        //birthDate: (response.data.birthDate).toDateString(),
+                        //birthDate: (response.data.birthDate),
                         city: response.data.city,
                         country: response.data.country,
-                        birthDate: response.data.birthDate
+                        birthDate: new Date(response.data.birthDate)
                     },
                 );
-
             });
     };
+
+    componentDidMount() {
+        this.getCurrentUser();
+    }
+
     render() {
         return(
             <>
@@ -108,8 +91,8 @@ export class UpdateInfoModal extends React.Component{
                                     Name
                                 </Form.Label>
                                 <Form.Control
-                                    value={this.props.firstName}
-                                    onChange={this.setName}>
+                                    name = "name"
+                                    onChange={this.handleUserInput}>
                                 </Form.Control>
                             </Form.Group>
                             <Form.Group>
@@ -117,8 +100,9 @@ export class UpdateInfoModal extends React.Component{
                                     Surname
                                 </Form.Label>
                                 <Form.Control
-                                    value={this.props.surname}
-                                    onChange={this.setSurname}>
+                                    name = "surname"
+                                    onChange={this.handleUserInput}
+                                    >
                                 </Form.Control>
                             </Form.Group>
                             <Form.Group>
@@ -126,8 +110,8 @@ export class UpdateInfoModal extends React.Component{
                                     City
                                 </Form.Label>
                                 <Form.Control
-                                    value={this.props.city}
-                                    onChange={this.setCity}>
+                                    name = "city"
+                                    onChange={this.handleUserInput}>
                                 </Form.Control>
                             </Form.Group>
                             <Form.Group>
@@ -135,8 +119,8 @@ export class UpdateInfoModal extends React.Component{
                                     Country
                                 </Form.Label>
                                 <Form.Control
-                                    value={this.props.country}
-                                    onChange={this.setCountry}>
+                                    name="country"
+                                    onChange={this.handleUserInput}>
                                 </Form.Control>
                             </Form.Group>
                             <Form.Group>
@@ -144,8 +128,7 @@ export class UpdateInfoModal extends React.Component{
                                     Birth Date
                                 </Form.Label>
                                 <Form.Control
-                                    value={this.props.birthDate}
-                                    onChange={this.setBirthDate}>
+                                    onChange={this.handleUserInput}>
                                 </Form.Control>
                             </Form.Group>
                         </Form>

@@ -6,11 +6,11 @@ import Dropdown from "react-bootstrap/Dropdown";
 import NavItem from "react-bootstrap/NavItem";
 import NavLink from "react-bootstrap/NavLink";
 
-
 export class AuthHeader extends React.Component {
 
     state = {
         user: '',
+        cookie: undefined
     };
 
     componentDidMount() {
@@ -23,8 +23,10 @@ export class AuthHeader extends React.Component {
     };
 
     deleteCookie = () => {
-        axios.get('http://localhost:8091/api/v1/auth/sign-out', { withCredentials: true });
+        axios.get('http://localhost:8091/api/v1/auth/sign-out', { withCredentials: true })
+            .then(response => this.setState({ cookie: response.data }));
     };
+
 
     render() {
         return (
@@ -32,7 +34,7 @@ export class AuthHeader extends React.Component {
                 <Dropdown.Toggle as={NavLink}>{this.state.user.nickName}</Dropdown.Toggle>
                 <Dropdown.Menu className="dropdown-menu-right">
                     <Dropdown.Item as={Link} to={`user/${this.state.user.nickName}`}>My profile</Dropdown.Item>
-                    <Dropdown.Item as={Link} to={`login`}>Log out</Dropdown.Item>
+                    <Dropdown.Item onClick={this.deleteCookie}as={Link} to={`login`}>Log out</Dropdown.Item>
                     <Dropdown.Divider/>
                 </Dropdown.Menu>
             </Dropdown>

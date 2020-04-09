@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
         User newUserInfo = userRepository.findByNickName(username);
         newUserInfo.setName(user.getName());
         newUserInfo.setSurname(user.getSurname());
-        newUserInfo.setBirthDate((user.getBirthDate()));
+        newUserInfo.setBirthDate(user.getBirthDate());
         newUserInfo.setCity(user.getCity());
         newUserInfo.setCountry(user.getCountry());
         return userRepository.save(newUserInfo);
