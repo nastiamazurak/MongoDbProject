@@ -1,4 +1,4 @@
-# MongoDbProject
+# SimpleFB
 
 Represents a simple version of a Facebook app, where you can write your posts, 
 discover and comment posts of other users. 
