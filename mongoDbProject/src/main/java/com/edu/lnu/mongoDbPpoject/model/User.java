@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -32,7 +33,10 @@ public class User  {
     private Date birthDate;
     private String city;
     private String country;
+    @Field("friends")
+    private List<String> friends;
     @DBRef
     private Role role;
     private boolean enabled;
+
 }

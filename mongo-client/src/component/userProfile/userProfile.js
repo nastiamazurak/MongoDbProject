@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import userAvatar from "/Users/nastiamazurak/Desktop/SimpleFacebook/mongo-client/src/component/image/avatar.png"
-import {Container} from "react-bootstrap";
+import {Button, Container} from "react-bootstrap";
 import {Row} from "react-bootstrap";
 import {Col} from "react-bootstrap";
 import {ListGroup} from "react-bootstrap";
@@ -9,6 +9,8 @@ import {Post} from "../post/post";
 import UpdateInfoModal from "./updateInfoModal";
 import {CommentBox} from "../post/commentBox";
 import jwt from "jwt-decode";
+import Accordion from "react-bootstrap/Accordion";
+import {FriendsList} from "./friendsList";
 
 
 export class UserProfile extends React.Component{
@@ -25,7 +27,11 @@ export class UserProfile extends React.Component{
         currentUser: {},
         posts:[],
         username: this.props.match.params.username,
-        commentsNumber: undefined
+        commentsNumber: undefined,
+        isFriend: undefined,
+        buttonText: undefined,
+        friends: [],
+        friend: undefined
     };
 
 
@@ -33,6 +39,14 @@ export class UserProfile extends React.Component{
         const jwt = this.cookiesToJson().JWT;
         return jwt && jwt.length > 10;
     };
+
+    isFriend =() =>{
+        axios.get(`http://localhost:8091/api/v1/user/isfriend/${this.state.username}`,
+            { withCredentials: true })
+            .then(response => this.setState({ isFriend: response.data }));
+        return this.state.isFriend;
+
+    }
 
     getCurrentUser = () => {
         axios.get('http://localhost:8091/api/v1/user', { withCredentials: true })
@@ -56,13 +70,45 @@ export class UserProfile extends React.Component{
         })
     };
 
+    getFriends=()=>{
+        axios.get(`http://localhost:8091/api/v1/user/${this.state.username}/friends`,
+            { withCredentials: true }).then(response => {
+            this.setState({friends: response.data}
+            )
+        })
+    }
+
     componentDidMount() {
         this.isAuthorized();
         this.cookiesToJson();
         this.getUserInfo();
         this.getUserPosts();
         this.getCurrentUser();
+        this.isFriend();
+        this.getFriends();
     }
+
+    addFriend=()=> {
+        axios.post(`http://localhost:8091/api/v1/user/friends`,
+            this.state.username,
+            {withCredentials: true})
+            .then((response) => {
+                this.setState({
+                    status: response.status
+                });
+            })
+    }
+
+
+    removeFriend=()=> {
+        axios.delete(`http://localhost:8091/api/v1/user/friends/${this.state.username}`,
+            { withCredentials: true }).then(response => {
+            this.setState({friend: response.data}
+            )
+        })
+    }
+
+
 
     formatDate(){
        var options = { month: 'long', year: 'numeric', day: 'numeric'};
@@ -76,8 +122,7 @@ export class UserProfile extends React.Component{
     hasUserAccess = () => this.state.username === this.state.currentUser.nickName;
 
     render() {
-        console.log(this.state.user.name);
-
+        console.log(this.state.friends)
         return(
             <Container>
                 <Row>
@@ -110,13 +155,24 @@ export class UserProfile extends React.Component{
                         <br/>
                         <h1>{this.state.user.name} {this.state.user.surname}</h1>
                         <h3 style={{color:"#4db6ac"}}>@{this.state.user.nickName}</h3>
+                        {!this.hasUserAccess()
+                        &&
+                            <div>
+                                {this.isFriend() ?
+                                <div><Button onClick = {this.removeFriend}>Unfollow</Button></div>:
+                                <div><Button onClick = {this.addFriend}>Follow</Button></div>}
+                            </div> }
                     </div>
                     <div className="col-6" style={{width: "66%"}}>
                         <br/>
                         <h3>User Statistics</h3>
                         <ListGroup>
                             <ListGroup.Item>
-                                <p>Total posts: {this.state.posts.length}</p>
+                                <div className= "d-flex justify-content-sm-between">
+                                    <Button variant="link">Total posts: {this.state.posts.length} </Button>
+                                    <FriendsList friends = {this.state.friends}>: {this.state.friends.length}  </FriendsList>
+                                    <Button variant="link" eventKey="0">Followers: </Button>
+                                </div>
                             </ListGroup.Item>
                         </ListGroup>
                     </div>
