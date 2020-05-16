@@ -66,8 +66,6 @@ export class Post extends React.Component{
     hasUserAccess = () => this.props.author === this.state.currentUser.nickName;
 
     render() {
-    console.log(this.state.text);
-
         return (
             <div className="p-2 bd-highlight">
                 <Card border="primary">
