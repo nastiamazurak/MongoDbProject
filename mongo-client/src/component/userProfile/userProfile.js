@@ -30,7 +30,8 @@ export class UserProfile extends React.Component{
         commentsNumber: undefined,
         isFriend: undefined,
         buttonText: undefined,
-        friends: [],
+        following: [],
+        followers:[],
         friend: undefined
     };
 
@@ -70,13 +71,24 @@ export class UserProfile extends React.Component{
         })
     };
 
-    getFriends=()=>{
-        axios.get(`http://localhost:8091/api/v1/user/${this.state.username}/friends`,
+    getFollowing=()=>{
+        axios.get(`http://localhost:8091/api/v1/user/${this.state.username}/following`,
             { withCredentials: true }).then(response => {
-            this.setState({friends: response.data}
+            this.setState({following: response.data}
             )
         })
     }
+
+    getFollowers=()=>{
+        axios.get(`http://localhost:8091/api/v1/user/${this.state.username}/followers`,
+            { withCredentials: true }).then(response => {
+            this.setState({followers: response.data}
+            )
+        })
+
+    }
+
+
 
     componentDidMount() {
         this.isAuthorized();
@@ -85,7 +97,8 @@ export class UserProfile extends React.Component{
         this.getUserPosts();
         this.getCurrentUser();
         this.isFriend();
-        this.getFriends();
+        this.getFollowing();
+        this.getFollowers();
     }
 
     addFriend=()=> {
@@ -170,8 +183,8 @@ export class UserProfile extends React.Component{
                             <ListGroup.Item>
                                 <div className= "d-flex justify-content-sm-between">
                                     <Button variant="link">Total posts: {this.state.posts.length} </Button>
-                                    <FriendsList friends = {this.state.friends}>: {this.state.friends.length}  </FriendsList>
-                                    <Button variant="link" eventKey="0">Followers: </Button>
+                                    <FriendsList friends = {this.state.following} buttonText = "Following"/>
+                                    <FriendsList friends = {this.state.followers} buttonText="Followers"/>
                                 </div>
                             </ListGroup.Item>
                         </ListGroup>

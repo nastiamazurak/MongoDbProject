@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user = userRepository.save(user);
         List<String> friends = new ArrayList<>();
-        user.setFriends(friends);
+        user.setFollowing(friends);
         return true;
     }
 
@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<String> getFriends(String nickname) {
         User user = userRepository.findByNickName(nickname);
-        return user.getFriends();
+        return user.getFollowing();
     }
 
     @Override
@@ -111,11 +111,11 @@ public class UserServiceImpl implements UserService {
         friend = friend.replace("=", "");
         if (userRepository.existsByNickName(friend)) {
             User user = getCurrentUser();
-            if (user.getFriends() == null) {
+            if (user.getFollowing() == null) {
                 List<String> friends = new ArrayList<>();
-                user.setFriends(friends);
+                user.setFollowing(friends);
             }
-            List<String> friends = user.getFriends();
+            List<String> friends = user.getFollowing();
             friends.add(friend);
             userRepository.save(user);
             return friend;
@@ -129,7 +129,7 @@ public class UserServiceImpl implements UserService {
     public String deleteFriend(String friend) {
         if (userRepository.existsByNickName(friend)) {
             User user = getCurrentUser();
-            List<String> friends = user.getFriends();
+            List<String> friends = user.getFollowing();
             friends.remove(friend);
             userRepository.save(user);
             return friend;
@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService {
     public boolean isFriend(String nickName) {
         User user = getCurrentUser();
         boolean result = false;
-        List<String> friends = user.getFriends();
+        List<String> friends = user.getFollowing();
         for (String s : friends){
             if (s.equals(nickName)){
                 result = true;
@@ -151,6 +151,25 @@ public class UserServiceImpl implements UserService {
             }
         }
         return result;
+    }
+
+    @Override
+    public List<String> getFollowers(String nickname) {
+        User user = userRepository.findByNickName(nickname);
+            List<String> followers = new ArrayList<>();
+
+        List<User> allUsers = userRepository.getAllByFollowingIsNotNull();
+        allUsers.remove(userRepository.findByNickName(nickname));
+        for (User u : allUsers){
+            for (String s: u.getFollowing()){
+                if (s.equals(nickname)){
+                    followers.add(u.getNickName());
+                }
+            }
+        }
+       user.setFollowers(followers);
+        userRepository.save(user);
+        return user.getFollowers();
     }
 
 }

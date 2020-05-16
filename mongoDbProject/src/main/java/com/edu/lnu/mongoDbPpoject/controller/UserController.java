@@ -34,7 +34,7 @@ public class UserController {
         User userOld = userService.getCurrentUser();
         return ResponseEntity.status(HttpStatus.OK).body(userService.updateUserInfo(user, userOld.getNickName()));
     }
-    @GetMapping("/{username}/friends")
+    @GetMapping("/{username}/following")
     public List<String> showFriends(@PathVariable String username){
         return userService.getFriends(username);
     }
@@ -51,6 +51,11 @@ public class UserController {
     @GetMapping("/isfriend/{nickName}")
     public boolean isFriend(@PathVariable String nickName){
         return userService.isFriend(nickName);
+    }
+
+    @GetMapping("/{nickName}/followers")
+    public List<String> getFollowers(@PathVariable String nickName){
+        return userService.getFollowers(nickName);
     }
 
 }
