@@ -33,5 +33,7 @@ public interface UserService {
 
     boolean isFriend(String nickName);
 
+    List<String> getFollowers(String nickname);
+
 }
 

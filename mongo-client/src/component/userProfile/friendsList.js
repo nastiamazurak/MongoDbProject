@@ -28,7 +28,7 @@ export class FriendsList extends React.Component {
         });
     }
     areFriends=()=>{
-        if (this.props.friends == null){
+        if (this.props.friends === ''){
             this.setState({
                 areFriends: false
             })
@@ -44,7 +44,7 @@ export class FriendsList extends React.Component {
                     //style={{ margin: '17px', height: '45px', width: '125px' }}
                     onClick={this.handleShow}
                 >
-                    Following: {this.props.friends.length}
+                    {this.props.buttonText}: {this.props.friends.length}
                 </Button>
 
                 {this.areFriends &&

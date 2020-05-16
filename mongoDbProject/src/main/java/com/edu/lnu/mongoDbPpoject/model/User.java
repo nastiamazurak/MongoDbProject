@@ -33,8 +33,10 @@ public class User  {
     private Date birthDate;
     private String city;
     private String country;
-    @Field("friends")
-    private List<String> friends;
+    @Field("following")
+    private List<String> following;
+    @Field("followers")
+    private List<String> followers;
     @DBRef
     private Role role;
     private boolean enabled;
