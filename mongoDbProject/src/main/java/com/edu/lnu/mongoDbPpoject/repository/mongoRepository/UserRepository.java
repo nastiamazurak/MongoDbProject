@@ -1,4 +1,4 @@
-package com.edu.lnu.mongoDbPpoject.repository;
+package com.edu.lnu.mongoDbPpoject.repository.mongoRepository;
 
 import com.edu.lnu.mongoDbPpoject.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;

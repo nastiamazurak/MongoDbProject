@@ -1,4 +1,4 @@
-package com.edu.lnu.mongoDbPpoject.service;
+package com.edu.lnu.mongoDbPpoject.service.mongoService;
 
 import com.edu.lnu.mongoDbPpoject.model.Role;
 import com.edu.lnu.mongoDbPpoject.model.User;

@@ -1,18 +1,18 @@
-package com.edu.lnu.mongoDbPpoject.service;
+package com.edu.lnu.mongoDbPpoject.service.mongoService;
 
 import com.edu.lnu.mongoDbPpoject.exception.UserNotFoundByUsername;
 import com.edu.lnu.mongoDbPpoject.exception.constant.ErrorMessage;
 import com.edu.lnu.mongoDbPpoject.exception.IncorrectPasswordException;
-import com.edu.lnu.mongoDbPpoject.model.Comment;
+import com.edu.lnu.mongoDbPpoject.model.Person;
 import com.edu.lnu.mongoDbPpoject.model.User;
-import com.edu.lnu.mongoDbPpoject.repository.RoleRepository;
-import com.edu.lnu.mongoDbPpoject.repository.UserRepository;
+import com.edu.lnu.mongoDbPpoject.repository.mongoRepository.RoleRepository;
+import com.edu.lnu.mongoDbPpoject.repository.mongoRepository.UserRepository;
 import com.edu.lnu.mongoDbPpoject.security.AuthBody;
 import com.edu.lnu.mongoDbPpoject.security.UserPrincipal;
+import com.edu.lnu.mongoDbPpoject.service.neo4JService.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,6 +29,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private PersonService personService;
     @Override
     public User getUserInfo(String username) {
         return userRepository.findByNickName(username);
@@ -74,6 +76,12 @@ public class UserServiceImpl implements UserService {
         user = userRepository.save(user);
         List<String> friends = new ArrayList<>();
         user.setFollowing(friends);
+
+        Person person = new Person();
+        person.setNickName(user.getNickName());
+        person.setFirstName(user.getName());
+        person.setLastName(user.getSurname());
+        personService.addPerson(person);
         return true;
     }
 
@@ -118,6 +126,7 @@ public class UserServiceImpl implements UserService {
             List<String> friends = user.getFollowing();
             friends.add(friend);
             userRepository.save(user);
+            personService.addConnection(user.getNickName(), friend);
             return friend;
         }
         else {
@@ -132,6 +141,7 @@ public class UserServiceImpl implements UserService {
             List<String> friends = user.getFollowing();
             friends.remove(friend);
             userRepository.save(user);
+            personService.deleteConnection(user.getNickName(), friend);
             return friend;
         }
         else{

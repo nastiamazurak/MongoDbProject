@@ -1,14 +1,17 @@
 package com.edu.lnu.mongoDbPpoject.controller;
 
+import com.edu.lnu.mongoDbPpoject.model.Person;
 import com.edu.lnu.mongoDbPpoject.model.User;
+import com.edu.lnu.mongoDbPpoject.repository.mongoRepository.UserRepository;
+import com.edu.lnu.mongoDbPpoject.repository.neo4JRepository.PersonRepository;
 import com.edu.lnu.mongoDbPpoject.security.CookieProvider;
-import com.edu.lnu.mongoDbPpoject.service.UserServiceImpl;
+import com.edu.lnu.mongoDbPpoject.service.mongoService.UserServiceImpl;
+import com.edu.lnu.mongoDbPpoject.service.neo4JService.PersonServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -19,7 +22,13 @@ public class UserController {
     UserServiceImpl userService;
 
     @Autowired
+    PersonServiceImpl personService;
+
+    @Autowired
     private CookieProvider cookie;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping()
     public User getCurrentUser(){
@@ -58,4 +67,12 @@ public class UserController {
         return userService.getFollowers(nickName);
     }
 
+    @GetMapping("/connections/{nickName}")
+    public String getConnections(@PathVariable String nickName){
+        return personService.getConnectionsPath(nickName);
+    }
+    @GetMapping("/commonFriends/{nickName}")
+    public List<String> getCommonFriends(@PathVariable String nickName){
+        return personService.getCommonFriends(nickName);
+    }
 }

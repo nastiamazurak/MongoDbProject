@@ -32,7 +32,10 @@ export class UserProfile extends React.Component{
         buttonText: undefined,
         following: [],
         followers:[],
-        friend: undefined
+        friend: undefined,
+        connections: "",
+        commonFriends: [],
+        connectionsNumber: 0
     };
 
 
@@ -41,12 +44,10 @@ export class UserProfile extends React.Component{
         return jwt && jwt.length > 10;
     };
 
-    isFriend =() =>{
+    isFriend =() => {
         axios.get(`http://localhost:8091/api/v1/user/isfriend/${this.state.username}`,
-            { withCredentials: true })
-            .then(response => this.setState({ isFriend: response.data }));
-        return this.state.isFriend;
-
+            {withCredentials: true})
+            .then(response => this.setState({isFriend: response.data}));
     }
 
     getCurrentUser = () => {
@@ -62,6 +63,27 @@ export class UserProfile extends React.Component{
             )
         })
     };
+
+    getConnections=()=>{
+        axios.get(`http://localhost:8091/api/v1/user/connections/${this.state.username}`,
+            { withCredentials: true })
+            .then(response => this.setState({ connections: response.data }));
+    }
+
+    getCommonFriends=()=>{
+        axios.get(`http://localhost:8091/api/v1/user/commonFriends/${this.state.username}`,
+            { withCredentials: true })
+            .then(response => this.setState({ commonFriends: response.data}));
+    }
+
+    countConnections=()=>{
+
+        var countArr = this.state.connections.split(",");
+        console.log(countArr);
+        return (countArr.length)-1;
+
+
+    }
 
     getUserPosts=()=>{
         axios.get(`http://localhost:8091/api/posts/${this.state.username}`,
@@ -89,7 +111,6 @@ export class UserProfile extends React.Component{
     }
 
 
-
     componentDidMount() {
         this.isAuthorized();
         this.cookiesToJson();
@@ -99,6 +120,10 @@ export class UserProfile extends React.Component{
         this.isFriend();
         this.getFollowing();
         this.getFollowers();
+        this.getConnections();
+        this.getCommonFriends();
+        this.countConnections();
+
     }
 
     addFriend=()=> {
@@ -121,21 +146,15 @@ export class UserProfile extends React.Component{
         })
     }
 
-
-
     formatDate(){
        var options = { month: 'long', year: 'numeric', day: 'numeric'};
        return new Date(this.state.user.birthDate).toLocaleDateString('en-GB', [],options)
     }
-   // formatDate(){
-     //   var options = { year: 'numeric', month: 'long', day: 'numeric' };
-      //  return new Date(this.state.date).toDateString([],options);
-    //}
 
     hasUserAccess = () => this.state.username === this.state.currentUser.nickName;
 
     render() {
-        console.log(this.state.friends)
+
         return(
             <Container>
                 <Row>
@@ -168,10 +187,15 @@ export class UserProfile extends React.Component{
                         <br/>
                         <h1>{this.state.user.name} {this.state.user.surname}</h1>
                         <h3 style={{color:"#4db6ac"}}>@{this.state.user.nickName}</h3>
+                        <br/>
+                        <h5>Connection path:</h5>
+                        <div>
+                            <p style={{color:"#4db6ac"}}>{this.state.connections.replace(/,/g, " -> ")}</p>
+                        </div>
                         {!this.hasUserAccess()
                         &&
                             <div>
-                                {this.isFriend() ?
+                                {this.state.isFriend ?
                                 <div><Button onClick = {this.removeFriend}>Unfollow</Button></div>:
                                 <div><Button onClick = {this.addFriend}>Follow</Button></div>}
                             </div> }
@@ -185,6 +209,15 @@ export class UserProfile extends React.Component{
                                     <Button variant="link">Total posts: {this.state.posts.length} </Button>
                                     <FriendsList friends = {this.state.following} buttonText = "Following"/>
                                     <FriendsList friends = {this.state.followers} buttonText="Followers"/>
+                                </div>
+                            </ListGroup.Item>
+                        </ListGroup>
+                        <br/>
+                        <ListGroup>
+                            <ListGroup.Item>
+                                <div className= "d-flex justify-content-sm-between">
+                                    <FriendsList friends = {this.state.commonFriends} buttonText = "Common Friends"/>
+                                    <Button variant="link">Connections: {this.countConnections()} </Button>
                                 </div>
                             </ListGroup.Item>
                         </ListGroup>

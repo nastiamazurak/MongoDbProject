@@ -1,16 +1,13 @@
 package com.edu.lnu.mongoDbPpoject.controller;
 
 import com.edu.lnu.mongoDbPpoject.model.Post;
-import com.edu.lnu.mongoDbPpoject.model.User;
-import com.edu.lnu.mongoDbPpoject.security.CookieProvider;
-import com.edu.lnu.mongoDbPpoject.service.CommentServiceImpl;
-import com.edu.lnu.mongoDbPpoject.service.PostServiceImpl;
-import com.edu.lnu.mongoDbPpoject.service.UserServiceImpl;
+import com.edu.lnu.mongoDbPpoject.service.mongoService.CommentServiceImpl;
+import com.edu.lnu.mongoDbPpoject.service.mongoService.PostServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletRequest;
+
 import java.util.List;
 
 @RestController
