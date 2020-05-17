@@ -56,7 +56,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "api/v1/auth/sign-out",
                         "/api/v1/auth/register",
                         "/api/posts/all",
-                        "/api/v1/user",
+                        "/api/v1/user/connections",
+                        "/api/v1/user/commonFriends",
                         "/api/v1/user/friends"
                         ).permitAll()
                 .anyRequest().authenticated()

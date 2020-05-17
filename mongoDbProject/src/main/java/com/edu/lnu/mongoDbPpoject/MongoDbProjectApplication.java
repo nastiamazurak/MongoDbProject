@@ -1,7 +1,7 @@
 package com.edu.lnu.mongoDbPpoject;
 
 import com.edu.lnu.mongoDbPpoject.model.Role;
-import com.edu.lnu.mongoDbPpoject.repository.RoleRepository;
+import com.edu.lnu.mongoDbPpoject.repository.mongoRepository.RoleRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

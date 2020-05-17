@@ -1,9 +1,8 @@
-package com.edu.lnu.mongoDbPpoject.service;
+package com.edu.lnu.mongoDbPpoject.service.mongoService;
 
-import com.edu.lnu.mongoDbPpoject.model.Comment;
 import com.edu.lnu.mongoDbPpoject.model.Post;
 import com.edu.lnu.mongoDbPpoject.model.User;
-import com.edu.lnu.mongoDbPpoject.repository.PostRepository;
+import com.edu.lnu.mongoDbPpoject.repository.mongoRepository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.sql.Timestamp;

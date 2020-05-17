@@ -3,7 +3,7 @@ package com.edu.lnu.mongoDbPpoject.security;
 import com.edu.lnu.mongoDbPpoject.exception.constant.ErrorMessage;
 import com.edu.lnu.mongoDbPpoject.exception.JwtAuthenticationExeption;
 import com.edu.lnu.mongoDbPpoject.model.User;
-import com.edu.lnu.mongoDbPpoject.service.UserService;
+import com.edu.lnu.mongoDbPpoject.service.mongoService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

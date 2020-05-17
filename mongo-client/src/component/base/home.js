@@ -38,7 +38,7 @@ export class Home extends React.Component {
             <Container style={{width: "60%"}}>
                 <br/>
             <div className='align-content-center'  style={{height: "100px",  margin: "20px"}}>
-                <WritePost posts = {this.getPosts()}></WritePost>
+                <WritePost posts = {this.state.posts}></WritePost>
                     <br/>
                 {this.state.posts.map(element => (
                     <div>

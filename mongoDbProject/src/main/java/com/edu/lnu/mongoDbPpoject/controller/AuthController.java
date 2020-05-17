@@ -8,7 +8,7 @@ import com.edu.lnu.mongoDbPpoject.security.AuthBody;
 import com.edu.lnu.mongoDbPpoject.security.CookieProvider;
 import com.edu.lnu.mongoDbPpoject.security.Helper;
 import com.edu.lnu.mongoDbPpoject.security.JWTTokenProvider;
-import com.edu.lnu.mongoDbPpoject.service.UserServiceImpl;
+import com.edu.lnu.mongoDbPpoject.service.mongoService.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
