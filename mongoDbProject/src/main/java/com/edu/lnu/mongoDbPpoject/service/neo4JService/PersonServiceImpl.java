@@ -19,9 +19,15 @@ public class PersonServiceImpl implements PersonService {
     @Autowired
     UserServiceImpl userService;
     @Override
-    public String getConnectionsPath(String nickName) {
+    public String getConnectionsPathInGoing(String nickName) {
         User user = userService.getCurrentUser();
-        return personRepository.getConnections(user.getNickName(), nickName);
+        return personRepository.getConnectionsInGoing(user.getNickName(), nickName);
+    }
+
+    @Override
+    public String getConnectionsPathOutGoing(String nickName) {
+        User user = userService.getCurrentUser();
+        return personRepository.getConnectionsOutGoing(user.getNickName(), nickName);
     }
 
     @Override

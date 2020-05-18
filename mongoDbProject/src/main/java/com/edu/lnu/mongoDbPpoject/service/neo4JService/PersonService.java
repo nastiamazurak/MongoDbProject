@@ -6,7 +6,8 @@ import java.util.List;
 
 public interface PersonService {
 
-    String getConnectionsPath(String nickName);
+    String getConnectionsPathInGoing(String nickName);
+    String getConnectionsPathOutGoing(String nickName);
     List<String> getCommonFriends(String nickName);
     void addConnection(String whoFollow, String whoIsFollowed);
     void deleteConnection(String whoFollow, String whoIsFollowed);
