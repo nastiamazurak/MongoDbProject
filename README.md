@@ -5,5 +5,5 @@ Represents a simple version of a Facebook app, where you can write your posts, d
 <br>
 Now user can follow other users. It's also possible to see common friends and connections between you and other users. 
 <ul><h4>Technologies used: </h4>
-<li>Backend: Java + Spring Boot + MongoDb + Neo4Ji </li>
+<li>Backend: Java + Spring Boot + MongoDb + Neo4J </li>
 <li>Frontend: React JS</li></ul>
