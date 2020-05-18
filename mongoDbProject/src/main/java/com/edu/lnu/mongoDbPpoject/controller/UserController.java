@@ -67,9 +67,13 @@ public class UserController {
         return userService.getFollowers(nickName);
     }
 
-    @GetMapping("/connections/{nickName}")
-    public String getConnections(@PathVariable String nickName){
-        return personService.getConnectionsPath(nickName);
+    @GetMapping("/connections/in/{nickName}")
+    public String getConnectionsIn(@PathVariable String nickName){
+        return personService.getConnectionsPathInGoing(nickName);
+    }
+    @GetMapping("/connections/out/{nickName}")
+    public String getConnectionsOut(@PathVariable String nickName){
+        return personService.getConnectionsPathOutGoing(nickName);
     }
     @GetMapping("/commonFriends/{nickName}")
     public List<String> getCommonFriends(@PathVariable String nickName){

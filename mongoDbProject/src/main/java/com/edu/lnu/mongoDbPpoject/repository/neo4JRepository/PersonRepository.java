@@ -19,16 +19,23 @@ public interface PersonRepository extends Neo4jRepository<Person,String> {
     List<String> getCommonFriends(@Param("person1")String person1, @Param("person2")String person2);
 
     @Query("Match p=shortestPath(" +
-            "(p1:Person)-[*]-(p2:Person)) WHERE (p1.nickName=$person1)" +
+            "(p1:Person)-[*]->(p2:Person)) WHERE (p1.nickName=$person1)" +
             "And (p2.nickName=$person2)" +
             "RETURN [n IN nodes(p)| n.nickName] ")
-    String getConnections(@Param("person1")String person1, @Param("person2")String person2);
+    String getConnectionsInGoing(@Param("person1")String person1, @Param("person2")String person2);
+
+    @Query("Match p=shortestPath(" +
+            "(p1:Person)<-[*]-(p2:Person)) WHERE (p1.nickName=$person1)" +
+            "And (p2.nickName=$person2)" +
+            "RETURN [n IN nodes(p)| n.nickName] ")
+    String getConnectionsOutGoing(@Param("person1")String person1, @Param("person2")String person2);
+
     @Query("MATCH(p:Person) RETURN p")
     List<Person> getAll();
 
     @Query("MATCH (a:Person), (b:Person) WHERE (a.nickName=$whoFollow)" +
             "AND (b.nickName = $whoIsFollowed) CREATE (a)-[r:Follows]->(b)")
-    Relationship createRelation(@Param("whoIsFollow")String whoFollow, @Param("whoIsFollowed")String whoIsFollowed);
+    void  createRelation(@Param("whoFollow")String whoFollow, @Param("whoIsFollowed")String whoIsFollowed);
 
     @Query("MATCH (a)" +
             "-[r:Follows]->(b) WHERE (a.nickName=$whoFollow) And (b.nickName=$whoIsFollowed)" +
@@ -36,5 +43,3 @@ public interface PersonRepository extends Neo4jRepository<Person,String> {
     void deleteRelation(@Param("whoFollow")String whoFollow, @Param("whoIsFollowed")String whoIsFollowed);
 
 }
-
-//RETURN [n IN nodes(p) | n.nickName] as names

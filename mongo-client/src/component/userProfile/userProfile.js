@@ -33,7 +33,8 @@ export class UserProfile extends React.Component{
         following: [],
         followers:[],
         friend: undefined,
-        connections: "",
+        connectionsIn: "",
+        connectionsOut:"",
         commonFriends: [],
         connectionsNumber: 0
     };
@@ -64,11 +65,18 @@ export class UserProfile extends React.Component{
         })
     };
 
-    getConnections=()=>{
-        axios.get(`http://localhost:8091/api/v1/user/connections/${this.state.username}`,
+    getConnectionsIn=()=>{
+        axios.get(`http://localhost:8091/api/v1/user/connections/in/${this.state.username}`,
             { withCredentials: true })
-            .then(response => this.setState({ connections: response.data }));
+            .then(response => this.setState({ connectionsIn: response.data }));
     }
+
+    getConnectionsOut=()=>{
+        axios.get(`http://localhost:8091/api/v1/user/connections/out/${this.state.username}`,
+            { withCredentials: true })
+            .then(response => this.setState({ connectionsOut: response.data }));
+    }
+
 
     getCommonFriends=()=>{
         axios.get(`http://localhost:8091/api/v1/user/commonFriends/${this.state.username}`,
@@ -76,13 +84,17 @@ export class UserProfile extends React.Component{
             .then(response => this.setState({ commonFriends: response.data}));
     }
 
-    countConnections=()=>{
+    countConnectionsIn=()=>{
 
-        var countArr = this.state.connections.split(",");
+        var countArr = this.state.connectionsIn.split(",");
         console.log(countArr);
         return (countArr.length)-1;
+    }
+    countConnectionsOut=()=>{
 
-
+        var countArr = this.state.connectionsOut.split(",");
+        console.log(countArr);
+        return (countArr.length)-1;
     }
 
     getUserPosts=()=>{
@@ -120,9 +132,11 @@ export class UserProfile extends React.Component{
         this.isFriend();
         this.getFollowing();
         this.getFollowers();
-        this.getConnections();
+        this.getConnectionsIn();
+        this.getConnectionsOut();
         this.getCommonFriends();
-        this.countConnections();
+        this.countConnectionsIn();
+        this.countConnectionsOut();
 
     }
 
@@ -188,10 +202,15 @@ export class UserProfile extends React.Component{
                         <h1>{this.state.user.name} {this.state.user.surname}</h1>
                         <h3 style={{color:"#4db6ac"}}>@{this.state.user.nickName}</h3>
                         <br/>
+                        {!this.hasUserAccess()
+                        &&
+                            <div>
                         <h5>Connection path:</h5>
-                        <div>
-                            <p style={{color:"#4db6ac"}}>{this.state.connections.replace(/,/g, " -> ")}</p>
-                        </div>
+                            <div>
+                            <p style={{color: "#4db6ac"}}> In: {this.state.connectionsIn.replace(/,/g, " -> ")}</p>
+                            <p style={{color: "#4db6ac"}}> Out: {this.state.connectionsOut.replace(/,/g, " <- ")}</p>
+                            </div>
+                        </div>}
                         {!this.hasUserAccess()
                         &&
                             <div>
@@ -217,7 +236,8 @@ export class UserProfile extends React.Component{
                             <ListGroup.Item>
                                 <div className= "d-flex justify-content-sm-between">
                                     <FriendsList friends = {this.state.commonFriends} buttonText = "Common Friends"/>
-                                    <Button variant="link">Connections: {this.countConnections()} </Button>
+                                    <Button variant="link">Connections In: {this.countConnectionsIn()} </Button>
+                                    <Button variant="link">Connections Out: {this.countConnectionsOut()} </Button>
                                 </div>
                             </ListGroup.Item>
                         </ListGroup>
